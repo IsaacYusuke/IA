@@ -1,33 +1,29 @@
 import pandas as pd
-#from sklearn.preprocessing import StandardScaler  # não precisa
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import accuracy_score
 
-# Carregue seu conjunto de dados CSV
-data = pd.read_csv('class02.csv')
+# Carregando o conjunto de dados CSV
+#data = pd.read_csv('class02.csv')  #As vezes nao funciona???
+data = pd.read_csv(r'C:\Users\yusuk\OneDrive\Tesouraria Águias de Haia\Poli\2023\IA\Exs Eduardo\class02.csv')  #Caminho completo
 
-# Separe os recursos (99 primeiras colunas) e os rótulos (última coluna)
+# Separando os atributos (99 primeiras colunas) e os rótulos (última coluna)
 X = data.iloc[:, :-1].values
 y = data.iloc[:, -1].values
 
-# Normalização dos dados (opcional, mas pode ser útil) # SEM ISSO MELHOROU A PRECISÃO DO ALGORITMO
-#scaler = StandardScaler()
-#X = scaler.fit_transform(X)
-
-# Crie um classificador KNN com k = 10
+# Criando um classificador KNN com k = 10
 k = 10
 knn_classifier = KNeighborsClassifier(n_neighbors=k)
 
-# Defina os índices para a validação cruzada com base nas primeiras 20% das linhas em cada fold
+# Definindo os índices para os 5 folds
 n_splits = 5
 fold_size = len(X) // n_splits
 
-# Realize a validação cruzada manualmente
+# Realizando a validação cruzada manualmente
 scores = []
 
 for i in range(n_splits):
     start = i * fold_size
-    end = (i + 1) * fold_size if i < n_splits - 1 else len(X)
+    end = (i + 1) * fold_size
     
     train_indices = list(range(0, start)) + list(range(end, len(X)))
     test_indices = list(range(start, end))
