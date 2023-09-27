@@ -4,7 +4,8 @@ from sklearn.metrics import accuracy_score
 
 # Carregando o conjunto de dados CSV
 #data = pd.read_csv('class02.csv')  #As vezes nao funciona???
-data = pd.read_csv(r'C:\Users\yusuk\OneDrive\Tesouraria Águias de Haia\Poli\2023\IA\Exs Eduardo\class02.csv')  #Caminho completo
+data = pd.read_csv(r'C:\Users\yusuk\Documents\Poli\2023\IA\Exs Eduardo\class02.csv')
+#data = pd.read_csv(r'C:\Users\yusuk\OneDrive\Tesouraria Águias de Haia\Poli\2023\IA\Exs Eduardo\class02.csv')  #Caminho completo
 
 # Separando os atributos (99 primeiras colunas) e os rótulos (última coluna)
 X = data.iloc[:, :-1].values
