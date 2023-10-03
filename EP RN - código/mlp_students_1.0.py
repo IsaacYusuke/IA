@@ -1,6 +1,20 @@
 # PCS3438 - Inteligência Artificial - 2023/2
 # Template para aula de laboratório em Redes Neurais - 20/09/2023
 
+#Nome 1: Isaac Yusuke Yanagui
+#NUSP 1: 10772369
+
+#Nome 2: Guilherme Rodrigues Bastos
+#NUSP 2: 10416851
+
+"""
+    1) Construir uma rede neural do tipo MLP com número configurável de camadas escondidas que seja treinável pelo algoritmo SGD (3.0)
+    A única diferença dessa entrega e o trabalho realizado no laboratório é o "S" do SGD, que envolve o treinamento utilizando:
+    1.1) Grupos de exemplos a cada iteração, ao invés do dataset de treino inteiro. Esses grupos são tipicamente chamados de "batches".
+    1.2) A learning rate inicial deve ser reduzida a cada passo para auxiliar a convergência. Formalmente ela deve ser quadraticamente somável.
+    Para lr_0 < 1.0, a expressão de decrescimento lr_i = lr_{i-1}/(1+i) é suficiente.
+"""
+
 import numpy as np
 
 
