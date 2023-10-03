@@ -38,7 +38,11 @@ class Layer:
             np.ndarray: Output of the layer
         """
 
-        raise NotImplementedError
+        #raise NotImplementedError
+
+        self.input = input_data
+        self.output = sigmoid(input_data.dot(self.weights) + self.biases)
+        return self.output
 
     def backward(self, output_error: np.ndarray, learning_rate: float) -> np.ndarray:
         """
@@ -54,7 +58,14 @@ class Layer:
             np.ndarray: Error of the previous layer
         """
 
-        raise NotImplementedError
+        #raise NotImplementedError
+        
+        gradient = output_error * sigmoid_derivative(self.output)
+        input_error = gradient.dot(self.weights.T)
+        
+        self.weights += self.input.T.dot(gradient) * learning_rate
+        
+        return input_error
 
 
 def forward(input: np.ndarray, layers: list[Layer]):
@@ -68,7 +79,14 @@ def forward(input: np.ndarray, layers: list[Layer]):
     Returns:
         np.ndarray: Output of the MLP model
     """
-    raise NotImplementedError
+    #raise NotImplementedError
+    
+    data = input
+    for layer in layers:
+        data = layer.forward(data)
+    return data
+
+
 
 
 def backward(
@@ -84,7 +102,11 @@ def backward(
         learning_rate (float): Learning rate
     """
 
-    raise NotImplementedError
+    #raise NotImplementedError
+    
+    error = y - y_hat
+    for i in range(len(layers)):
+        error = layers[-i -1].backward(error, learning_rate)
 
 
 def main():
