@@ -131,13 +131,15 @@ def main():
     # Hyperparameters
     hidden_layers = [2, 2]  # Two hidden layers, 2 neurons each
     epochs = 100000
-    learning_rate = 0.1
+    learning_rate = 0.9   #0.1  #versao 1.0 - nao converge se a lr inicial for mt baixa? - convergencia aumentou com lr maior
 
     # Initialize layers
     layers = [Layer(x.shape[1], hidden_layers[0])]
     for i in range(len(hidden_layers) - 1):
         layers.append(Layer(hidden_layers[i], hidden_layers[i + 1]))
     layers.append(Layer(hidden_layers[-1], y.shape[1]))
+    
+    i = 2  #versao 1.0
 
     # Train the model
     for epoch in range(epochs):
@@ -151,6 +153,9 @@ def main():
 
         # Backward
         backward(y, y_hat, layers, learning_rate)
+        
+        #learning_rate = learning_rate/i   # versao 1.0 - pq nao converge?
+        #i = i + 1                         # versao 1.0
 
     # Test the model
     y_hat = forward(x, layers)
