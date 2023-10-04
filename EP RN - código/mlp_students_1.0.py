@@ -129,9 +129,10 @@ def main():
     y = np.array([[0], [1], [1], [0]])
 
     # Hyperparameters
+    batch_size = 2  # Tamanho do mini lote
     hidden_layers = [2, 2]  # Two hidden layers, 2 neurons each
     epochs = 100000
-    learning_rate0 = 0.9   #0.1  #versao 1.0 - nao converge se a lr inicial for mt baixa? - convergencia aumentou com lr maior
+    learning_rate0 = 0.25   #0.1  #versao 1.0 - nao converge se a lr inicial for mt baixa? - convergencia aumentou com lr maior
     learning_rate = learning_rate0
 
     # Initialize layers
@@ -144,19 +145,25 @@ def main():
 
     # Train the model
     for epoch in range(epochs):
-        # Forward pass
-        y_hat = forward(x, layers)
+        # versao 1.0 - Embaralhar os dados
+        indices = np.random.permutation(len(x))
+        x_shuffled = x[indices]
+        y_shuffled = y[indices]
 
-        # Loss
-        loss = mse_loss(y, y_hat)
+        for i in range(0, len(x), batch_size): # versao 1.0 - Treinamento nos mini lotes (batches)
+            x_batch = x_shuffled[i:i + batch_size]
+            y_batch = y_shuffled[i:i + batch_size]
+
+            # Forward pass e backward para o mini lote
+            y_hat = forward(x_batch, layers)
+            loss = mse_loss(y_batch, y_hat)
+            backward(y_batch, y_hat, layers, learning_rate)
+
         if epoch % 1000 == 0:
             print(f"Epoch {epoch} Loss: {np.mean(loss)}")
-
-        # Backward
-        backward(y, y_hat, layers, learning_rate)
         
-        #learning_rate = learning_rate0/i   # versao 1.0 - pq nao converge?
-        #i = i + 1                         # versao 1.0
+        learning_rate = learning_rate0/i   # versao 1.0 - pq nao converge? 
+        i = i + 1                         # versao 1.0 - R: melhorou quando colocou os batches tambem!
 
     # Test the model
     y_hat = forward(x, layers)
