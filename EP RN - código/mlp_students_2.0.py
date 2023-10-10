@@ -54,7 +54,7 @@ class Layer:
         self.output = sigmoid(input_data.dot(self.weights) + self.biases)
         return self.output
 
-    def backward(self, output_error: np.ndarray, learning_rate: float) -> np.ndarray:
+    def backward(self, output_error: np.ndarray, learning_rate: float, lambda_reg: float) -> np.ndarray:
         """
         TODO: Implement backward pass of a single MLP layer
 
@@ -73,7 +73,7 @@ class Layer:
         gradient = output_error * sigmoid_derivative(self.output)
         input_error = gradient.dot(self.weights.T)
         
-        self.weights += self.input.T.dot(gradient) * learning_rate
+        self.weights += self.input.T.dot(gradient) * learning_rate - lambda_reg * self.weights  #versao 2.0
         
         return input_error
 
@@ -100,7 +100,7 @@ def forward(input: np.ndarray, layers: list[Layer]):
 
 
 def backward(
-    y: np.ndarray, y_hat: np.ndarray, layers: list[Layer], learning_rate: float
+    y: np.ndarray, y_hat: np.ndarray, layers: list[Layer], learning_rate: float, lambda_reg: float
 ) -> None:
     """
     TODO: Applies backpropagation to the MLP model
@@ -116,7 +116,7 @@ def backward(
     
     error = y - y_hat
     for i in range(len(layers)):
-        error = layers[-i -1].backward(error, learning_rate)
+        error = layers[-i -1].backward(error, learning_rate, lambda_reg)
 
 
 def main():
@@ -130,6 +130,7 @@ def main():
     epochs = 100000
     learning_rate0 = 0.25   #0.1  #versao 1.0 - nao converge se a lr inicial for mt baixa? - convergencia aumentou com lr maior
     learning_rate = learning_rate0
+    lambda_reg = 0.000000001   #versao 2.0  - termo de regularização L2 - não converge mais? - convergiu com valores bem baixos de lambda_reg
 
     # Initialize layers
     layers = [Layer(x.shape[1], hidden_layers[0])]
@@ -153,7 +154,7 @@ def main():
             # Forward pass e backward para o mini lote
             y_hat = forward(x_batch, layers)
             loss = mse_loss(y_batch, y_hat)
-            backward(y_batch, y_hat, layers, learning_rate)
+            backward(y_batch, y_hat, layers, learning_rate, lambda_reg)
 
         if epoch % 1000 == 0:
             print(f"Epoch {epoch} Loss: {np.mean(loss)}")
