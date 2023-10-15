@@ -130,7 +130,7 @@ def main():
     epochs = 100000
     learning_rate0 = 0.25   #0.1  #versao 1.0 - nao converge se a lr inicial for mt baixa? - convergencia aumentou com lr maior
     learning_rate = learning_rate0
-    lambda_reg = 0.000000001   #versao 2.0  - termo de regularização L2 - não converge mais? - convergiu com valores bem baixos de lambda_reg
+    lambda_reg = 0.00000001   #versao 2.0  - termo de regularização L2 - não converge mais? - convergiu com valores bem baixos de lambda_reg
 
     # Initialize layers
     layers = [Layer(x.shape[1], hidden_layers[0])]
