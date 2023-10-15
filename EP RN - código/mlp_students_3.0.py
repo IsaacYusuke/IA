@@ -138,15 +138,16 @@ def main():
     
     # versao 3.0 - 3.1) Realizar a divisão do dataset em subset de treino (80%) e de teste (20%)
     train_indices = np.random.permutation(len(x_full))
-    x = x_full[train_indices][0:0.8*len(x_full)]
-    y = y_full[train_indices][0:0.8*len(x_full)]
-    x_test = x_full[train_indices][0.8*len(x_full):]
-    y_test = y_full[train_indices][0.8*len(x_full):]
+    cut_index = int(0.8*len(x_full))
+    x = x_full[train_indices][0:cut_index]
+    y = y_full[train_indices][0:cut_index]
+    x_test = x_full[train_indices][cut_index:]
+    y_test = y_full[train_indices][cut_index:]
     
     # versao 3.0 - 3.2) Realizar a normalização das features (Z-Score ou Max-min)
 
     # Hyperparameters
-    batch_size = 200  # Tamanho do mini lote - versao 3.0 - aumenta o tamanho
+    batch_size = 100  # Tamanho do mini lote - versao 3.0 - aumenta o tamanho
     hidden_layers = [2, 2]  # Two hidden layers, 2 neurons each
     epochs = 100000
     learning_rate0 = 0.5   #0.1  #versao 1.0 - nao converge se a lr inicial for mt baixa? - convergencia aumentou com lr maior
@@ -184,10 +185,10 @@ def main():
         i = i + 1                         # versao 1.0 - R: melhorou quando colocou os batches tambem!
 
     # Test the model
-    y_hat = forward(x, layers)
+    y_hat = forward(x_test, layers)
 
-    print("Test input:", x)
-    print("Test output:", y_hat)
+    print("Test input:", x_test)
+    print("Test error:", y_hat - y_test)
 
 
 if __name__ == "__main__":
