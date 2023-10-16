@@ -182,7 +182,7 @@ def main():
         if epoch % 1000 == 0:
             print(f"Epoch {epoch} Loss: {np.mean(loss)}")
         
-        learning_rate = learning_rate0/i   # versao 1.0 - pq nao converge? 
+        learning_rate = learning_rate0/i   # versao 1.0 - pq nao converge? - versao 3.0 - convergencia melhorou sem essa linha
         i = i + 1                         # versao 1.0 - R: melhorou quando colocou os batches tambem!
 
     # Test the model
