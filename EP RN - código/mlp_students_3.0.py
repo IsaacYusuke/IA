@@ -176,21 +176,50 @@ def main():
 
             # Forward pass e backward para o mini lote
             y_hat = forward(x_batch, layers)
-            loss = mse_loss(y_batch, y_hat)
             backward(y_batch, y_hat, layers, learning_rate, lambda_reg)
 
         if epoch % 1000 == 0:
+            loss = mse_loss(y_batch, y_hat)
             print(f"Epoch {epoch} Loss: {np.mean(loss)}")
         
-        learning_rate = learning_rate0/i   # versao 1.0 - pq nao converge? - versao 3.0 - convergencia melhorou sem essa linha
+        #learning_rate = learning_rate0/i   # versao 1.0 - pq nao converge? - versao 3.0 - convergencia melhorou sem essa linha
+        learning_rate = learning_rate0/np.log(i) #versao 3.0 - tenta um decaimento mais lento do lr - funcionou!
         i = i + 1                         # versao 1.0 - R: melhorou quando colocou os batches tambem!
 
     # Test the model
-    y_hat = forward(x_test, layers)
+    y_hat = np.round(forward(x_test, layers)) #versao 3.0 - classificação binaria (0 ou 1)
 
-    print("Test input:", x_test)
-    print("Test error:", y_hat - y_test)
-
+    # versao 3.0 - 3.4) Reportar a acurácia da classificação
+    print("Acurracy: ", 100*(1 - np.mean(abs(y_hat - y_test))), "%")  # porcentagem de acertos
+    
+    # versao 3.0 - 3.5) Reportar a matriz de confusão da classificação
+    """"
+                    |   Predicted Positive        |   Predicted Negative   |
+    ------------------------------------------------------------------
+    Class Positive  |   True Positive  (TP)       |   False Negative (FN)  |
+    Class Negative  |   False Positive (FP)       |   True Negative  (TN)  |
+    """
+    TP = 0
+    FP = 0
+    TN = 0
+    FN = 0
+    total = len(y_hat)
+    for i in range(total):
+        if y_hat[i] == 1 and y_test[i] == 1: # ambos 1 = True Positive
+            TP = TP + 1
+        elif  y_hat[i] == 0 and y_test[i] == 0: # ambos 0 = True Negative
+            TN = TN + 1
+        elif y_hat[i] == 1:   #False Positive
+            FP = FP + 1
+        else:                #False Negative
+            FN = FN + 1 
+    
+    print("Matriz de confusão: ")
+    print("True Positive: ",  TP, "(", 100* TP/total, "%)")
+    print("True Negative: ",  TN, "(", 100* TN/total, "%)")
+    print("False Positive: ", FP, "(", 100* FP/total, "%)")
+    print("False Negative: ", FN, "(", 100* FN/total, "%)")
+    print("Total de exemplos: ", total)
 
 if __name__ == "__main__":
     main()
