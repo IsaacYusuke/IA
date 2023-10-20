@@ -14,6 +14,7 @@
 
 import numpy as np
 from sklearn.datasets import load_breast_cancer #versao 3.0
+import matplotlib.pyplot as plt #versao 4.0
 
 
 def sigmoid(x: np.ndarray):
@@ -150,7 +151,8 @@ def main():
     #versao 4.0 - Utilizar a técnica de k-fold cross-validation para selecionar os hiperparâmetros alpha (coeficiente da regularização L2) e learning rate.
     learning_rate0 = 0.9   #0.1  #versao 1.0 - nao converge se a lr inicial for mt baixa? - convergencia aumentou com lr maior
     learning_rate = learning_rate0
-    for lambda_reg in np.arange(0.0001, 0.0011, 0.0001): #versao 4.0
+    lambda_reg_list = np.arange(0.0001, 0.0011, 0.0001) #versao 4.0
+    for lambda_reg in lambda_reg_list: #versao 4.0
     
         # Initialize layers
         layers = [Layer(x.shape[1], hidden_layers[0])]
@@ -223,6 +225,19 @@ def main():
         print("False Negative: ", FN, "(", 100* FN/total, "%)")
         print("Total de exemplos: ", total)
         """
+        
+    # Crie um gráfico de dispersão
+    plt.scatter(lambda_reg_list, 100*(1 - np.mean(abs(y_hat - y_test))))
+
+    # Adicione rótulos aos eixos
+    plt.xlabel('lambda_reg')
+    plt.ylabel('Acurracy')
+
+    # Adicione um título ao gráfico
+    plt.title('Acurracy x lambda_reg')
+
+    # Exiba o gráfico
+    plt.show()
 
 if __name__ == "__main__":
     main()
