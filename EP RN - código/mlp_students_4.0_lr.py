@@ -150,7 +150,8 @@ def main():
     epochs = 100000
     #versao 4.0 - Utilizar a técnica de k-fold cross-validation para selecionar os hiperparâmetros alpha (coeficiente da regularização L2) e learning rate.
     lambda_reg = 0.0001   #versao 2.0  - termo de regularização L2 - não converge mais? - convergiu com valores bem baixos de lambda_reg
-    learning_rate_list = np.arange(0.1, 1.1, 0.1) #versao 4.0
+    learning_rate_list = np.linspace(0.1, 1, 10) #versao 4.0
+    acurracy_list = [] #versao 4.0
     for learning_rate0 in learning_rate_list: #versao 4.0
         learning_rate = learning_rate0
     
@@ -192,7 +193,9 @@ def main():
 
         # versao 3.0 - 3.4) Reportar a acurácia da classificação
         # versao 4.0 - acurácia de cada learning rate
-        print("Learning rate:", learning_rate0, "- Acurracy:", 100*(1 - np.mean(abs(y_hat - y_test))), "%")  # porcentagem de acertos
+        acurracy = 100*(1 - np.mean(abs(y_hat - y_test)))
+        acurracy_list = acurracy_list + [acurracy]
+        print("Learning rate:", learning_rate0, "- Acurracy:", acurracy, "%")  # porcentagem de acertos
         
         # versao 3.0 - 3.5) Reportar a matriz de confusão da classificação
         """"
@@ -227,7 +230,7 @@ def main():
         """
         
     # Crie um gráfico de dispersão
-    plt.scatter(learning_rate_list, 100*(1 - np.mean(abs(y_hat - y_test))))
+    plt.plot(learning_rate_list, acurracy_list, marker='o', linestyle='-', color='b')
 
     # Adicione rótulos aos eixos
     plt.xlabel('Learning Rate')

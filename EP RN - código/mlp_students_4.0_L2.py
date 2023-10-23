@@ -151,7 +151,8 @@ def main():
     #versao 4.0 - Utilizar a técnica de k-fold cross-validation para selecionar os hiperparâmetros alpha (coeficiente da regularização L2) e learning rate.
     learning_rate0 = 0.9   #0.1  #versao 1.0 - nao converge se a lr inicial for mt baixa? - convergencia aumentou com lr maior
     learning_rate = learning_rate0
-    lambda_reg_list = np.arange(0.0001, 0.0011, 0.0001) #versao 4.0
+    lambda_reg_list = np.linspace(0.0001, 0.01, 10) #versao 4.0
+    acurracy_list = [] #versao 4.0
     for lambda_reg in lambda_reg_list: #versao 4.0
     
         # Initialize layers
@@ -192,7 +193,9 @@ def main():
 
         # versao 3.0 - 3.4) Reportar a acurácia da classificação
         # versao 4.0 - acurácia de cada lambda_reg
-        print("lambda_reg:", lambda_reg, "- Acurracy:", 100*(1 - np.mean(abs(y_hat - y_test))), "%")  # porcentagem de acertos
+        acurracy = 100*(1 - np.mean(abs(y_hat - y_test)))
+        acurracy_list = acurracy_list + [acurracy]
+        print("lambda_reg:", lambda_reg, "- Acurracy:", acurracy, "%")  # porcentagem de acertos
         
         # versao 3.0 - 3.5) Reportar a matriz de confusão da classificação
         """"
@@ -227,7 +230,7 @@ def main():
         """
         
     # Crie um gráfico de dispersão
-    plt.scatter(lambda_reg_list, 100*(1 - np.mean(abs(y_hat - y_test))))
+    plt.plot(lambda_reg_list, acurracy_list, marker='o', linestyle='-', color='b')
 
     # Adicione rótulos aos eixos
     plt.xlabel('lambda_reg')
