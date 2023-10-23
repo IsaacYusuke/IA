@@ -145,7 +145,7 @@ def main():
     y_test = y_full[train_indices][cut_index:]
 
     # Hyperparameters
-    batch_size = 200  # Tamanho do mini lote - versao 3.0 - aumenta o tamanho
+    batch_size = int(cut_index/2)  # Tamanho do mini lote - versao 3.0 - aumenta o tamanho
     hidden_layers = [2, 2]  # Two hidden layers, 2 neurons each
     epochs = 100000
     #versao 4.0 - Utilizar a técnica de k-fold cross-validation para selecionar os hiperparâmetros alpha (coeficiente da regularização L2) e learning rate.
@@ -170,7 +170,7 @@ def main():
             x_shuffled = x[indices]
             y_shuffled = y[indices]
 
-            for i in range(0, len(x), batch_size): # versao 1.0 - Treinamento nos mini lotes (batches)
+            for i in range(0, len(x_shuffled), batch_size): # versao 1.0 - Treinamento nos mini lotes (batches)
                 x_batch = x_shuffled[i:i + batch_size]
                 y_batch = y_shuffled[i:i + batch_size]
 
