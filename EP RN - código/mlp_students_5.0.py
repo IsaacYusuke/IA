@@ -131,9 +131,9 @@ def main():
     # Features: real, positive
     data = load_breast_cancer()
     x_full = data.data
-    y_full = np.array([data.target]).reshape(-1, 1) #versao 3.0 - transforma vetor em matriz? np.array([data.target])
+    y_full = np.array([data.target]).reshape(-1, 1) #versao 3.0 - 
     
-    # versao 3.0 - 3.2) Realizar a normalização das features (Z-Score ou Max-min) - usa Max-min
+    # versao 3.0 - 3.2) Realizar a normalização das features (Max-min)
     x_full = (x_full - np.min(x_full))/(np.max(x_full) - np.min(x_full))
     
     # versao 3.0 - 3.1) Realizar a divisão do dataset em subset de treino (80%) e de teste (20%)
@@ -145,15 +145,14 @@ def main():
     y_test = y_full[train_indices][cut_index:]
 
     # Hyperparameters
-    batch_size = int(cut_index/2)  # Tamanho do mini lote - versao 3.0 - aumenta o tamanho
+    batch_size = int(cut_index/2)  # Tamanho do mini lote - versao 3.0 
     #hidden_layers = [2, 2]  # Two hidden layers, 2 neurons each
     epochs = 100000
-    #versao 4.0 - Utilizar a técnica de k-fold cross-validation para selecionar os hiperparâmetros alpha (coeficiente da regularização L2) e learning rate.
-    lambda_reg = 0.0001   #versao 2.0  - termo de regularização L2 - não converge mais? - convergiu com valores bem baixos de lambda_reg
+    lambda_reg = 0.0001   #versao 2.0  - termo de regularização L2 
     learning_rate0 = 1
     learning_rate = learning_rate0
     acurracy_list = [] #versao 4.0
-    hidden_layers_list = [[1], [2], [3], [1,1], [2,2], [3,3], [1,1,1], [2,2,2], [3,3,3]]
+    hidden_layers_list = [[1], [2], [3], [4], [5], [1,1], [2,2], [3,3], [4,4], [5,5], [1,1,1], [2,2,2], [3,3,3], [4,4,4], [5,5,5]]
     for hidden_layers in hidden_layers_list:
             
         # Initialize layers
@@ -187,9 +186,8 @@ def main():
                 print(f"Epoch {epoch} Loss: {np.mean(loss)}")
             """
             
-            #learning_rate = learning_rate0/i   # versao 1.0 - pq nao converge? - versao 3.0 - convergencia melhorou sem essa linha
-            learning_rate = learning_rate0/np.log(i) #versao 3.0 - tenta um decaimento mais lento do lr - funcionou!
-            i = i + 1                         # versao 1.0 - R: melhorou quando colocou os batches tambem!
+            learning_rate = learning_rate0/np.log(i) #versao 3.0 - decaimento do lr 
+            i = i + 1                         
 
         # Test the model
         y_hat = np.round(forward(x_test, layers)) #versao 3.0 - classificação binaria (0 ou 1)
@@ -232,18 +230,18 @@ def main():
         print("Total de exemplos: ", total)
         """
         
-    # Crie um gráfico de dispersão
-    hidden_layers_list2 = ['[1]', '[2]', '[3]', '[1,1]', '[2,2]', '[3,3]', '[1,1,1]', '[2,2,2]', '[3,3,3]']
+    # Criar um gráfico de dispersão
+    hidden_layers_list2 = ['[1]', '[2]', '[3]', '[4]', '[5]', '[1,1]', '[2,2]', '[3,3]', '[4,4]', '[5,5]', '[1,1,1]', '[2,2,2]', '[3,3,3]', '[4,4,4]', '[5,5,5]']
     plt.plot(hidden_layers_list2, acurracy_list, marker='o', linestyle='-', color='b')
 
-    # Adicione rótulos aos eixos
+    # Adicionar rótulos aos eixos
     plt.xlabel('hidden layers')
     plt.ylabel('Acurracy')
 
-    # Adicione um título ao gráfico
+    # Adicionar um título ao gráfico
     plt.title('Acurracy x hidden layers')
 
-    # Exiba o gráfico
+    # Exibir o gráfico
     plt.show()
 
 if __name__ == "__main__":
