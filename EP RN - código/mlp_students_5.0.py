@@ -146,20 +146,23 @@ def main():
 
     # Hyperparameters
     batch_size = int(cut_index/2)  # Tamanho do mini lote - versao 3.0 - aumenta o tamanho
-    hidden_layers = [2, 2]  # Two hidden layers, 2 neurons each
+    #hidden_layers = [2, 2]  # Two hidden layers, 2 neurons each
     epochs = 100000
     #versao 4.0 - Utilizar a técnica de k-fold cross-validation para selecionar os hiperparâmetros alpha (coeficiente da regularização L2) e learning rate.
     lambda_reg = 0.0001   #versao 2.0  - termo de regularização L2 - não converge mais? - convergiu com valores bem baixos de lambda_reg
-    learning_rate_list = np.linspace(0.1, 1, 10) #versao 4.0
+    learning_rate0 = 1
+    learning_rate = learning_rate0
     acurracy_list = [] #versao 4.0
-    for learning_rate0 in learning_rate_list: #versao 4.0
-        learning_rate = learning_rate0
-    
+    hidden_layers_list = [[1], [2], [3], [1,1], [2,2], [3,3], [1,1,1], [2,2,2], [3,3,3]]
+    for hidden_layers in hidden_layers_list:
+            
         # Initialize layers
         layers = [Layer(x.shape[1], hidden_layers[0])]
         for i in range(len(hidden_layers) - 1):
             layers.append(Layer(hidden_layers[i], hidden_layers[i + 1]))
         layers.append(Layer(hidden_layers[-1], y.shape[1]))
+        
+        learning_rate = learning_rate0
         
         i = 2  #versao 1.0
 
@@ -192,10 +195,10 @@ def main():
         y_hat = np.round(forward(x_test, layers)) #versao 3.0 - classificação binaria (0 ou 1)
 
         # versao 3.0 - 3.4) Reportar a acurácia da classificação
-        # versao 4.0 - acurácia de cada learning rate
+        # versao 5.0 - acurácia de cada configuração de camadas
         acurracy = 100*(1 - np.mean(abs(y_hat - y_test)))
         acurracy_list = acurracy_list + [acurracy]
-        print("Learning rate:", learning_rate0, "- Acurracy:", acurracy, "%")  # porcentagem de acertos
+        print("Layers:", hidden_layers, "- Acurracy:", acurracy, "%")  # porcentagem de acertos
         
         # versao 3.0 - 3.5) Reportar a matriz de confusão da classificação
         """"
@@ -230,14 +233,15 @@ def main():
         """
         
     # Crie um gráfico de dispersão
-    plt.plot(learning_rate_list, acurracy_list, marker='o', linestyle='-', color='b')
+    hidden_layers_list2 = ['[1]', '[2]', '[3]', '[1,1]', '[2,2]', '[3,3]', '[1,1,1]', '[2,2,2]', '[3,3,3]']
+    plt.plot(hidden_layers_list2, acurracy_list, marker='o', linestyle='-', color='b')
 
     # Adicione rótulos aos eixos
-    plt.xlabel('Learning Rate')
+    plt.xlabel('hidden layers')
     plt.ylabel('Acurracy')
 
     # Adicione um título ao gráfico
-    plt.title('Acurracy x Learning Rate')
+    plt.title('Acurracy x hidden layers')
 
     # Exiba o gráfico
     plt.show()
