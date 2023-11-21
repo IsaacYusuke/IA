@@ -52,7 +52,6 @@ class Layer:
             np.ndarray: Output of the layer
         """
 
-        #raise NotImplementedError
 
         self.input = input_data
         self.output = sigmoid(input_data.dot(self.weights) + self.biases)
@@ -72,7 +71,6 @@ class Layer:
             np.ndarray: Error of the previous layer
         """
 
-        #raise NotImplementedError
         
         gradient = output_error * sigmoid_derivative(self.output)
         input_error = gradient.dot(self.weights.T)
@@ -93,7 +91,6 @@ def forward(input: np.ndarray, layers: list[Layer]):
     Returns:
         np.ndarray: Output of the MLP model
     """
-    #raise NotImplementedError
     
     data = input
     for layer in layers:
@@ -116,7 +113,6 @@ def backward(
         learning_rate (float): Learning rate
     """
 
-    #raise NotImplementedError
     
     error = y - y_hat
     for i in range(len(layers)):
@@ -132,7 +128,7 @@ def main():
     batch_size = 2  # Tamanho do mini lote
     hidden_layers = [2, 2]  # Two hidden layers, 2 neurons each
     epochs = 100000
-    learning_rate0 = 0.25   #0.1  #versao 1.0 - nao converge se a lr inicial for mt baixa? - convergencia aumentou com lr maior
+    learning_rate0 = 0.25     #versao 1.0 
     learning_rate = learning_rate0
 
     # Initialize layers
@@ -162,8 +158,8 @@ def main():
         if epoch % 1000 == 0:
             print(f"Epoch {epoch} Loss: {np.mean(loss)}")
         
-        learning_rate = learning_rate0/i   # versao 1.0 - pq nao converge? 
-        i = i + 1                         # versao 1.0 - R: melhorou quando colocou os batches tambem!
+        learning_rate = learning_rate0/i   # versao 1.0 
+        i = i + 1                         # versao 1.0 
 
     # Test the model
     y_hat = forward(x, layers)

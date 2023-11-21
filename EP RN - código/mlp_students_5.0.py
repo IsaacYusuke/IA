@@ -51,7 +51,6 @@ class Layer:
             np.ndarray: Output of the layer
         """
 
-        #raise NotImplementedError
 
         self.input = input_data
         self.output = sigmoid(input_data.dot(self.weights) + self.biases)
@@ -71,7 +70,6 @@ class Layer:
             np.ndarray: Error of the previous layer
         """
 
-        #raise NotImplementedError
         
         gradient = output_error * sigmoid_derivative(self.output)
         input_error = gradient.dot(self.weights.T)
@@ -92,7 +90,6 @@ def forward(input: np.ndarray, layers: list[Layer]):
     Returns:
         np.ndarray: Output of the MLP model
     """
-    #raise NotImplementedError
     
     data = input
     for layer in layers:
@@ -115,7 +112,6 @@ def backward(
         learning_rate (float): Learning rate
     """
 
-    #raise NotImplementedError
     
     error = y - y_hat
     for i in range(len(layers)):
@@ -179,12 +175,6 @@ def main():
                 # Forward pass e backward para o mini lote
                 y_hat = forward(x_batch, layers)
                 backward(y_batch, y_hat, layers, learning_rate, lambda_reg)
-
-            """"
-            if epoch % 1000 == 0:  #versao 4.0 - tira esse print pra nao poluir a tela e visualizar a precisao de cada learning rate
-                loss = mse_loss(y_batch, y_hat)
-                print(f"Epoch {epoch} Loss: {np.mean(loss)}")
-            """
             
             learning_rate = learning_rate0/np.log(i) #versao 3.0 - decaimento do lr 
             i = i + 1                         
@@ -198,37 +188,6 @@ def main():
         acurracy_list = acurracy_list + [acurracy]
         print("Layers:", hidden_layers, "- Acurracy:", acurracy, "%")  # porcentagem de acertos
         
-        # versao 3.0 - 3.5) Reportar a matriz de confusão da classificação
-        """"
-                        |   Predicted Positive        |   Predicted Negative   |
-        ------------------------------------------------------------------
-        Class Positive  |   True Positive  (TP)       |   False Negative (FN)  |
-        Class Negative  |   False Positive (FP)       |   True Negative  (TN)  |
-        """
-        
-        """"
-        TP = 0
-        FP = 0
-        TN = 0
-        FN = 0
-        total = len(y_hat)
-        for i in range(total):
-            if y_hat[i] == 1 and y_test[i] == 1: # ambos 1 = True Positive
-                TP = TP + 1
-            elif  y_hat[i] == 0 and y_test[i] == 0: # ambos 0 = True Negative
-                TN = TN + 1
-            elif y_hat[i] == 1:   #False Positive
-                FP = FP + 1
-            else:                #False Negative
-                FN = FN + 1 
-        
-        print("Matriz de confusão: ")
-        print("True Positive: ",  TP, "(", 100* TP/total, "%)")
-        print("True Negative: ",  TN, "(", 100* TN/total, "%)")
-        print("False Positive: ", FP, "(", 100* FP/total, "%)")
-        print("False Negative: ", FN, "(", 100* FN/total, "%)")
-        print("Total de exemplos: ", total)
-        """
         
     # Criar um gráfico de dispersão
     hidden_layers_list2 = ['[1]', '[2]', '[3]', '[4]', '[5]', '[1,1]', '[2,2]', '[3,3]', '[4,4]', '[5,5]', '[1,1,1]', '[2,2,2]', '[3,3,3]', '[4,4,4]', '[5,5,5]']

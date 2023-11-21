@@ -53,7 +53,6 @@ class Layer:
             np.ndarray: Output of the layer
         """
 
-        #raise NotImplementedError
 
         self.input = input_data
         self.output = sigmoid(input_data.dot(self.weights) + self.biases)
@@ -73,7 +72,6 @@ class Layer:
             np.ndarray: Error of the previous layer
         """
 
-        #raise NotImplementedError
         
         gradient = output_error * sigmoid_derivative(self.output)
         input_error = gradient.dot(self.weights.T)
@@ -94,7 +92,6 @@ def forward(input: np.ndarray, layers: list[Layer]):
     Returns:
         np.ndarray: Output of the MLP model
     """
-    #raise NotImplementedError
     
     data = input
     for layer in layers:
@@ -117,7 +114,6 @@ def backward(
         learning_rate (float): Learning rate
     """
 
-    #raise NotImplementedError
     
     error = y - y_hat
     for i in range(len(layers)):
@@ -133,9 +129,9 @@ def main():
     # Features: real, positive
     data = load_breast_cancer()
     x_full = data.data
-    y_full = np.array([data.target]).reshape(-1, 1) #versao 3.0 - transforma vetor em matriz? np.array([data.target])
+    y_full = np.array([data.target]).reshape(-1, 1) #versao 3.0 
     
-    # versao 3.0 - 3.2) Realizar a normalização das features (Z-Score ou Max-min) - usa Max-min
+    # versao 3.0 - 3.2) Realizar a normalização das features (Max-min)
     x_full = (x_full - np.min(x_full))/(np.max(x_full) - np.min(x_full))
     
     # versao 3.0 - 3.1) Realizar a divisão do dataset em subset de treino (80%) e de teste (20%)
@@ -147,11 +143,11 @@ def main():
     y_test = y_full[train_indices][cut_index:]
 
     # Hyperparameters
-    batch_size = int(cut_index/2)  # Tamanho do mini lote - versao 3.0 - aumenta o tamanho
+    batch_size = int(cut_index/2)  # Tamanho do mini lote 
     hidden_layers = [2, 2]  # Two hidden layers, 2 neurons each
     epochs = 100000
     #versao 4.0 - Utilizar a técnica de k-fold cross-validation para selecionar os hiperparâmetros alpha (coeficiente da regularização L2) e learning rate.
-    learning_rate0 = 0.9   #0.1  #versao 1.0 - nao converge se a lr inicial for mt baixa? - convergencia aumentou com lr maior
+    learning_rate0 = 0.9     #versao 1.0 
     learning_rate = learning_rate0
     lambda_reg_list = np.linspace(0.0001, 0.01, 10) #versao 4.0
     acurracy_list = [] #versao 4.0
@@ -180,15 +176,10 @@ def main():
                 y_hat = forward(x_batch, layers)
                 backward(y_batch, y_hat, layers, learning_rate, lambda_reg)
 
-            """"
-            if epoch % 1000 == 0:  #versao 4.0 - tira esse print pra nao poluir a tela e visualizar a precisao de cada learning rate
-                loss = mse_loss(y_batch, y_hat)
-                print(f"Epoch {epoch} Loss: {np.mean(loss)}")
-            """
             
-            #learning_rate = learning_rate0/i   # versao 1.0 - pq nao converge? - versao 3.0 - convergencia melhorou sem essa linha
-            learning_rate = learning_rate0/np.log(i) #versao 3.0 - tenta um decaimento mais lento do lr - funcionou!
-            i = i + 1                         # versao 1.0 - R: melhorou quando colocou os batches tambem!
+            
+            learning_rate = learning_rate0/np.log(i) #versao 3.0 
+            i = i + 1                         # versao 1.0 
 
         # Test the model
         y_hat = np.round(forward(x_test, layers)) #versao 3.0 - classificação binaria (0 ou 1)
@@ -199,53 +190,22 @@ def main():
         acurracy_list = acurracy_list + [acurracy]
         print("lambda_reg:", lambda_reg, "- Acurracy:", acurracy, "%")  # porcentagem de acertos
         
-        # versao 3.0 - 3.5) Reportar a matriz de confusão da classificação
-        """"
-                        |   Predicted Positive        |   Predicted Negative   |
-        ------------------------------------------------------------------
-        Class Positive  |   True Positive  (TP)       |   False Negative (FN)  |
-        Class Negative  |   False Positive (FP)       |   True Negative  (TN)  |
-        """
         
-        """
-        TP = 0
-        FP = 0
-        TN = 0
-        FN = 0
-        total = len(y_hat)
-        for i in range(total):
-            if y_hat[i] == 1 and y_test[i] == 1: # ambos 1 = True Positive
-                TP = TP + 1
-            elif  y_hat[i] == 0 and y_test[i] == 0: # ambos 0 = True Negative
-                TN = TN + 1
-            elif y_hat[i] == 1:   #False Positive
-                FP = FP + 1
-            else:                #False Negative
-                FN = FN + 1 
-       
-        print("Matriz de confusão: ")
-        print("True Positive: ",  TP, "(", 100* TP/total, "%)")
-        print("True Negative: ",  TN, "(", 100* TN/total, "%)")
-        print("False Positive: ", FP, "(", 100* FP/total, "%)")
-        print("False Negative: ", FN, "(", 100* FN/total, "%)")
-        print("Total de exemplos: ", total)
-        """
-        
-    # Crie um gráfico de dispersão
+    # Criar um gráfico de dispersão
     plt.plot(lambda_reg_list, acurracy_list, marker='o', linestyle='-', color='b')
 
-    # Adicione rótulos aos eixos
+    # Adicionar rótulos aos eixos
     plt.xlabel('lambda_reg')
     plt.ylabel('Acurracy')
 
-    # Adicione um título ao gráfico
+    # Adicionar um título ao gráfico
     plt.title('Acurracy x lambda_reg')
 
-    # Exiba o gráfico
+    # Exibir o gráfico
     plt.show()
     
     #versao 4.0 - Utilizar a técnica de k-fold cross-validation para selecionar os hiperparâmetros alpha (coeficiente da regularização L2) e learning rate.
-    lambda_reg = 0.0001   #versao 2.0  - termo de regularização L2 - não converge mais? - convergiu com valores bem baixos de lambda_reg
+    lambda_reg = 0.0001   #versao 2.0  - termo de regularização L2 
     learning_rate_list = np.linspace(0.1, 1, 10) #versao 4.0
     acurracy_list = [] #versao 4.0
     for learning_rate0 in learning_rate_list: #versao 4.0
@@ -274,15 +234,9 @@ def main():
                 y_hat = forward(x_batch, layers)
                 backward(y_batch, y_hat, layers, learning_rate, lambda_reg)
 
-            """"
-            if epoch % 1000 == 0:  #versao 4.0 - tira esse print pra nao poluir a tela e visualizar a precisao de cada learning rate
-                loss = mse_loss(y_batch, y_hat)
-                print(f"Epoch {epoch} Loss: {np.mean(loss)}")
-            """
             
-            #learning_rate = learning_rate0/i   # versao 1.0 - pq nao converge? - versao 3.0 - convergencia melhorou sem essa linha
-            learning_rate = learning_rate0/np.log(i) #versao 3.0 - tenta um decaimento mais lento do lr - funcionou!
-            i = i + 1                         # versao 1.0 - R: melhorou quando colocou os batches tambem!
+            learning_rate = learning_rate0/np.log(i) #versao 3.0 
+            i = i + 1                         # versao 1.0 
 
         # Test the model
         y_hat = np.round(forward(x_test, layers)) #versao 3.0 - classificação binaria (0 ou 1)
@@ -293,49 +247,18 @@ def main():
         acurracy_list = acurracy_list + [acurracy]
         print("Learning rate:", learning_rate0, "- Acurracy:", acurracy, "%")  # porcentagem de acertos
         
-        # versao 3.0 - 3.5) Reportar a matriz de confusão da classificação
-        """"
-                        |   Predicted Positive        |   Predicted Negative   |
-        ------------------------------------------------------------------
-        Class Positive  |   True Positive  (TP)       |   False Negative (FN)  |
-        Class Negative  |   False Positive (FP)       |   True Negative  (TN)  |
-        """
         
-        """"
-        TP = 0
-        FP = 0
-        TN = 0
-        FN = 0
-        total = len(y_hat)
-        for i in range(total):
-            if y_hat[i] == 1 and y_test[i] == 1: # ambos 1 = True Positive
-                TP = TP + 1
-            elif  y_hat[i] == 0 and y_test[i] == 0: # ambos 0 = True Negative
-                TN = TN + 1
-            elif y_hat[i] == 1:   #False Positive
-                FP = FP + 1
-            else:                #False Negative
-                FN = FN + 1 
-        
-        print("Matriz de confusão: ")
-        print("True Positive: ",  TP, "(", 100* TP/total, "%)")
-        print("True Negative: ",  TN, "(", 100* TN/total, "%)")
-        print("False Positive: ", FP, "(", 100* FP/total, "%)")
-        print("False Negative: ", FN, "(", 100* FN/total, "%)")
-        print("Total de exemplos: ", total)
-        """
-        
-    # Crie um gráfico de dispersão
+    # Criar um gráfico de dispersão
     plt.plot(learning_rate_list, acurracy_list, marker='o', linestyle='-', color='b')
 
-    # Adicione rótulos aos eixos
+    # Adicionar rótulos aos eixos
     plt.xlabel('Learning Rate')
     plt.ylabel('Acurracy')
 
-    # Adicione um título ao gráfico
+    # Adicionar um título ao gráfico
     plt.title('Acurracy x Learning Rate')
 
-    # Exiba o gráfico
+    # Exibir o gráfico
     plt.show()
 
 if __name__ == "__main__":

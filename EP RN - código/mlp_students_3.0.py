@@ -54,7 +54,6 @@ class Layer:
             np.ndarray: Output of the layer
         """
 
-        #raise NotImplementedError
 
         self.input = input_data
         self.output = sigmoid(input_data.dot(self.weights) + self.biases)
@@ -74,7 +73,6 @@ class Layer:
             np.ndarray: Error of the previous layer
         """
 
-        #raise NotImplementedError
         
         gradient = output_error * sigmoid_derivative(self.output)
         input_error = gradient.dot(self.weights.T)
@@ -95,7 +93,6 @@ def forward(input: np.ndarray, layers: list[Layer]):
     Returns:
         np.ndarray: Output of the MLP model
     """
-    #raise NotImplementedError
     
     data = input
     for layer in layers:
@@ -118,7 +115,6 @@ def backward(
         learning_rate (float): Learning rate
     """
 
-    #raise NotImplementedError
     
     error = y - y_hat
     for i in range(len(layers)):
@@ -134,9 +130,9 @@ def main():
     # Features: real, positive
     data = load_breast_cancer()
     x_full = data.data
-    y_full = np.array([data.target]).reshape(-1, 1) #versao 3.0 - transforma vetor em matriz? np.array([data.target])
+    y_full = np.array([data.target]).reshape(-1, 1) #versao 3.0 
     
-    # versao 3.0 - 3.2) Realizar a normalização das features (Z-Score ou Max-min) - usa Max-min
+    # versao 3.0 - 3.2) Realizar a normalização das features (Max-min)
     x_full = (x_full - np.min(x_full))/(np.max(x_full) - np.min(x_full))
     
     # versao 3.0 - 3.1) Realizar a divisão do dataset em subset de treino (80%) e de teste (20%)
@@ -148,12 +144,12 @@ def main():
     y_test = y_full[train_indices][cut_index:]
 
     # Hyperparameters
-    batch_size = 200  # Tamanho do mini lote - versao 3.0 - aumenta o tamanho
+    batch_size = 200  # Tamanho do mini lote 
     hidden_layers = [2, 2]  # Two hidden layers, 2 neurons each
     epochs = 100000
-    learning_rate0 = 0.5   #0.1  #versao 1.0 - nao converge se a lr inicial for mt baixa? - convergencia aumentou com lr maior
+    learning_rate0 = 0.5    #versao 1.0 
     learning_rate = learning_rate0
-    lambda_reg = 0.0005   #versao 2.0  - termo de regularização L2 - não converge mais? - convergiu com valores bem baixos de lambda_reg
+    lambda_reg = 0.0005   #versao 2.0  - termo de regularização L2 
 
     # Initialize layers
     layers = [Layer(x.shape[1], hidden_layers[0])]
@@ -182,9 +178,9 @@ def main():
             loss = mse_loss(y_batch, y_hat)
             print(f"Epoch {epoch} Loss: {np.mean(loss)}")
         
-        #learning_rate = learning_rate0/i   # versao 1.0 - pq nao converge? - versao 3.0 - convergencia melhorou sem essa linha
-        learning_rate = learning_rate0/np.log(i) #versao 3.0 - tenta um decaimento mais lento do lr - funcionou!
-        i = i + 1                         # versao 1.0 - R: melhorou quando colocou os batches tambem!
+        
+        learning_rate = learning_rate0/np.log(i) #versao 3.0 
+        i = i + 1                         # versao 1.0 
 
     # Test the model
     y_hat = np.round(forward(x_test, layers)) #versao 3.0 - classificação binaria (0 ou 1)
