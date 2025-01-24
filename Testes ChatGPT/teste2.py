@@ -1,4 +1,5 @@
-# Logistic Regression - usa função logística (sigmóide) = 1/(1+exp(-z))
+# Logistic Regression - usa função logística (sigmóide) = 1/(1+exp(-z)) para classificação binária
+# z = w1*x1 + w2*x2 + ... + b
 
 # Importar bibliotecas necessárias
 import numpy as np
