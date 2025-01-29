@@ -9,12 +9,15 @@ import numpy as np
 # Carregar o dataset MNIST
 (X_train, y_train), (X_test, y_test) = tf.keras.datasets.mnist.load_data()
 
+# Sortear 6 imagens aleatórias do conjunto de treino
+indices_aleatorios = np.random.choice(len(X_train), 6, replace=False)
+
 # Visualizar algumas imagens do dataset
 plt.figure(figsize=(10, 5))
-for i in range(10):
-    plt.subplot(2, 5, i + 1)
-    plt.imshow(X_train[i], cmap='gray')
-    plt.title(f"Label: {y_train[i]}")
+for i, idx in enumerate(indices_aleatorios):
+    plt.subplot(2, 3, i + 1)
+    plt.imshow(X_train[idx], cmap='gray')
+    plt.title(f"Label: {y_train[idx]}")
     plt.axis('off')
 plt.show()
 
@@ -49,10 +52,13 @@ print(f"Teste - Loss: {test_loss:.4f}, Accuracy: {test_accuracy:.4f}")
 # Visualizar algumas previsões
 predictions = model.predict(X_test)
 
+# Sortear 6 imagens aleatórias do conjunto de teste
+indices_aleatorios = np.random.choice(len(X_test), 6, replace=False)
+
 plt.figure(figsize=(10, 5))
-for i in range(10):
-    plt.subplot(2, 5, i + 1)
-    plt.imshow(X_test[i], cmap='gray')
-    plt.title(f"Real: {np.argmax(y_test[i])}, Pred: {np.argmax(predictions[i])}")
+for i, idx in enumerate(indices_aleatorios):
+    plt.subplot(2, 3, i + 1)
+    plt.imshow(X_test[idx], cmap='gray')
+    plt.title(f"Real: {np.argmax(y_test[idx])}, Pred: {np.argmax(predictions[idx])}")
     plt.axis('off')
 plt.show()
