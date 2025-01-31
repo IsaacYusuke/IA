@@ -1,3 +1,5 @@
+# Regressão Linear com Scikit-learn - estimar preço de casas
+
 # Importar bibliotecas
 import numpy as np
 import pandas as pd

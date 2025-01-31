@@ -1,3 +1,5 @@
+#Classificar imagens com rede neural - digitos manuscritos
+
 # Importar bibliotecas necessárias
 import tensorflow as tf
 from tensorflow.keras import Sequential
