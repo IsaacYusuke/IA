@@ -1,7 +1,10 @@
-#Teste DeepSeek
+#Teste DeepSeek? - NAO FUNCIONA COM TRANSFORMERS - peguei outro modelo no huggingface - Nao funcionou??
 
 from transformers import pipeline
 import torch
+from huggingface_hub import login
+
+login(token="***") #TOKEN FUNCIONOU - pedi acesso no site huggingface - COPILOT NAO DEIXOU SALVAR O TOKEN
 
 """" # Verificar se a GPU está disponível
 print(torch.cuda.is_available())  # Deve retornar True
@@ -11,8 +14,8 @@ print(torch.cuda.current_device())  # Deve mostrar 0
 # Verificar se a GPU está disponível e definir o dispositivo correto
 device = 0 if torch.cuda.is_available() else -1
 
-# Carregar o modelo pré-treinado DeepSeek e usar a GPU se disponível
-modelo = pipeline("text-generation", model="deepseek-ai/deepseek-coder-1.3b", device=device)
+# Carregar o modelo pré-treinado e usar a GPU se disponível
+modelo = pipeline("text-generation", model="mistralai/Mistral-Small-24B-Instruct-2501", device=device, trust_remote_code=True)
 
 # Função para gerar texto
 def gerar_texto(prompt, max_palavras=100):
