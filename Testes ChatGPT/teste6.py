@@ -4,7 +4,7 @@ from transformers import pipeline
 import torch
 from huggingface_hub import login
 
-login(token="***") #TOKEN FUNCIONOU - pedi acesso no site huggingface - COPILOT NAO DEIXOU SALVAR O TOKEN
+login(token="***") #TOKEN FUNCIONOU - pedi acesso no site huggingface - GITHUB NAO DEIXOU SALVAR O TOKEN
 
 """" # Verificar se a GPU está disponível
 print(torch.cuda.is_available())  # Deve retornar True
