@@ -10,6 +10,7 @@
 
 # Modelo DeepSeek-Coder - menor(?)
 # vllm serve deepseek-ai/deepseek-coder-1.3b --tensor-parallel-size 1 --max-model-len 4096 --swap-space 2 --dtype=half --enforce-eager
+# vllm serve deepseek-ai/deepseek-coder-1.3b --tensor-parallel-size 1 --max-model-len 4096 --swap-space 2 --dtype=half --enforce-eager --trust-remote-code
 
 import requests
 
