@@ -1,8 +1,15 @@
 #Teste DeepSeek - ChatGPT falou pra criar um servidor
 
+# wsl pra abrir o terminal do linux no windows
+
 # Comando pra rodar o servidor DeepSeek
 # vllm serve deepseek-ai/DeepSeek-R1-Distill-Qwen-32B --tensor-parallel-size 2 --max-model-len 32768 --enforce-eager
 # vllm serve deepseek-ai/DeepSeek-R1-Distill-Qwen-32B --tensor-parallel-size 1 --max-model-len 8192 --swap-space 2 --enforce-eager
+# vllm serve deepseek-ai/DeepSeek-R1-Distill-Qwen-32B --tensor-parallel-size 1 --max-model-len 8192 --swap-space 2 --dtype=half --enforce-eager
+# vllm serve deepseek-ai/DeepSeek-R1-Distill-Qwen-32B --tensor-parallel-size 1 --max-model-len 8192 --swap-space 2 --dtype=half --cpu-offload-gb 2 --enforce-eager
+
+# Modelo DeepSeek-Coder - menor(?)
+# vllm serve deepseek-ai/deepseek-coder-1.3b --tensor-parallel-size 1 --max-model-len 4096 --swap-space 2 --dtype=half --enforce-eager
 
 import requests
 
