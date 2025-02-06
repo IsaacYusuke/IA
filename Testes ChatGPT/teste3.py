@@ -35,7 +35,8 @@ y_test = to_categorical(y_test, 10)
 # Construir o modelo
 model = Sequential([
     Flatten(input_shape=(28, 28)),   # Achatar imagens de 28x28 para 1D (28*28=784)
-    Dense(128, activation='relu'),  # Camada densa com 128 neurônios
+    Dense(128, activation='relu'),  # Camada densa com x neurônios - mudei
+    Dense(128, activation='relu'),
     Dense(10, activation='softmax') # Saída com 10 classes (0-9)
 ])
 
